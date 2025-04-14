@@ -1,0 +1,397 @@
+basePath: /
+definitions:
+  github_com_obutora_internal_api_v1_dto.ProductRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - name
+    - price
+    type: object
+  github_com_obutora_internal_api_v1_dto.ProductResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  github_com_obutora_internal_api_v1_dto.ProductsResponse:
+    properties:
+      page:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse'
+        type: array
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_obutora_internal_api_v1_dto.UserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  github_com_obutora_internal_api_v1_dto.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_obutora_internal_api_v1_dto.UsersResponse:
+    properties:
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse'
+        type: array
+    type: object
+  github_com_obutora_internal_model.AppError:
+    properties:
+      code:
+        $ref: '#/definitions/github_com_obutora_internal_model.ErrorCode'
+      message:
+        type: string
+    type: object
+  github_com_obutora_internal_model.ErrorCode:
+    enum:
+    - NOT_FOUND
+    - INVALID_INPUT
+    - UNAUTHORIZED
+    - INTERNAL_ERROR
+    - DUPLICATE
+    type: string
+    x-enum-varnames:
+    - ErrNotFound
+    - ErrInvalidInput
+    - ErrUnauthorized
+    - ErrInternalError
+    - ErrDuplicate
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: API documentation for the application
+  title: API Documentation
+  version: "1.0"
+paths:
+  /api/v1/products:
+    get:
+      consumes:
+      - application/json
+      description: 製品一覧をページネーションで取得します
+      parameters:
+      - default: 1
+        description: ページ番号
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: ページサイズ
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: 製品一覧取得
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: 新しい製品を作成します
+      parameters:
+      - description: 製品情報
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: 製品作成
+      tags:
+      - products
+  /api/v1/products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 指定されたIDの製品を削除します
+      parameters:
+      - description: 製品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: 製品削除
+      tags:
+      - products
+    get:
+      consumes:
+      - application/json
+      description: 指定されたIDの製品情報を取得します
+      parameters:
+      - description: 製品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: 製品情報取得
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: 指定されたIDの製品情報を更新します
+      parameters:
+      - description: 製品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 製品情報
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: 製品更新
+      tags:
+      - products
+  /api/v1/users:
+    get:
+      consumes:
+      - application/json
+      description: ユーザー一覧をページネーションで取得します
+      parameters:
+      - default: 1
+        description: ページ番号
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: ページサイズ
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: ユーザー一覧取得
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: 新しいユーザーを作成します
+      parameters:
+      - description: ユーザー情報
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: ユーザー作成
+      tags:
+      - users
+  /api/v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 指定されたIDのユーザーを削除します
+      parameters:
+      - description: ユーザーID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: ユーザー削除
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: 指定されたIDのユーザー情報を取得します
+      parameters:
+      - description: ユーザーID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: ユーザー情報取得
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: 指定されたIDのユーザー情報を更新します
+      parameters:
+      - description: ユーザーID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ユーザー情報
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_obutora_internal_model.AppError'
+      summary: ユーザー更新
+      tags:
+      - users
+swagger: "2.0"

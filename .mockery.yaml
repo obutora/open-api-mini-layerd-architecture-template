@@ -1,0 +1,16 @@
+quiet: False
+disable-version-string: True
+with-expecter: True
+mockname: "{{.InterfaceName}}"
+filename: "mock_{{.MockName}}.go"
+dir: "mock/{{.PackageName}}"
+outpkg: "{{.PackageName}}"
+packages:
+  github.com/obutora/internal/repository:
+    config:
+      recursive: true
+      all: True
+  github.com/obutora/internal/service:
+    config:
+      recursive: true
+      all: True

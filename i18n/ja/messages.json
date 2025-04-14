@@ -1,0 +1,48 @@
+{
+    "common": {
+        "success": "成功",
+        "error": "エラー",
+        "notFound": "見つかりません",
+        "invalidInput": "無効な入力",
+        "unauthorized": "認証エラー",
+        "forbidden": "アクセス拒否",
+        "serverError": "サーバーエラー",
+        "conflict": "競合エラー"
+    },
+    "user": {
+        "notFound": "ユーザーが見つかりません",
+        "alreadyExists": "このメールアドレスのユーザーは既に存在します",
+        "created": "ユーザーが正常に作成されました",
+        "updated": "ユーザー情報が正常に更新されました",
+        "deleted": "ユーザーが正常に削除されました",
+        "invalidEmail": "無効なメールアドレスです",
+        "invalidPassword": "パスワードは8文字以上で、少なくとも1つの数字、1つの大文字、1つの小文字、1つの特殊文字を含む必要があります",
+        "invalidName": "名前は必須です"
+    },
+    "product": {
+        "notFound": "製品が見つかりません",
+        "created": "製品が正常に作成されました",
+        "updated": "製品情報が正常に更新されました",
+        "deleted": "製品が正常に削除されました",
+        "invalidName": "製品名は必須です",
+        "invalidPrice": "製品価格は0より大きい必要があります"
+    },
+    "auth": {
+        "invalidCredentials": "メールアドレスまたはパスワードが無効です",
+        "loginSuccess": "ログインに成功しました",
+        "logoutSuccess": "ログアウトに成功しました",
+        "tokenExpired": "トークンの有効期限が切れています",
+        "invalidToken": "無効なトークンです",
+        "accessDenied": "アクセスが拒否されました"
+    },
+    "validation": {
+        "required": "{0}は必須です",
+        "email": "{0}は有効なメールアドレスである必要があります",
+        "min": "{0}は{1}文字以上である必要があります",
+        "max": "{0}は{1}文字以下である必要があります",
+        "numeric": "{0}は数値である必要があります",
+        "boolean": "{0}は真偽値である必要があります",
+        "date": "{0}は有効な日付である必要があります",
+        "enum": "{0}は次のいずれかである必要があります: {1}"
+    }
+}

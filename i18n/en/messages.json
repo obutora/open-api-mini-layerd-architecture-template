@@ -1,0 +1,48 @@
+{
+    "common": {
+        "success": "Success",
+        "error": "Error",
+        "notFound": "Not Found",
+        "invalidInput": "Invalid Input",
+        "unauthorized": "Unauthorized",
+        "forbidden": "Forbidden",
+        "serverError": "Internal Server Error",
+        "conflict": "Conflict"
+    },
+    "user": {
+        "notFound": "User not found",
+        "alreadyExists": "User with this email already exists",
+        "created": "User created successfully",
+        "updated": "User updated successfully",
+        "deleted": "User deleted successfully",
+        "invalidEmail": "Invalid email address",
+        "invalidPassword": "Password must be at least 8 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character",
+        "invalidName": "Name is required"
+    },
+    "product": {
+        "notFound": "Product not found",
+        "created": "Product created successfully",
+        "updated": "Product updated successfully",
+        "deleted": "Product deleted successfully",
+        "invalidName": "Product name is required",
+        "invalidPrice": "Product price must be greater than 0"
+    },
+    "auth": {
+        "invalidCredentials": "Invalid email or password",
+        "loginSuccess": "Login successful",
+        "logoutSuccess": "Logout successful",
+        "tokenExpired": "Token has expired",
+        "invalidToken": "Invalid token",
+        "accessDenied": "Access denied"
+    },
+    "validation": {
+        "required": "{0} is required",
+        "email": "{0} must be a valid email address",
+        "min": "{0} must be at least {1} characters",
+        "max": "{0} must be at most {1} characters",
+        "numeric": "{0} must be a number",
+        "boolean": "{0} must be a boolean",
+        "date": "{0} must be a valid date",
+        "enum": "{0} must be one of: {1}"
+    }
+}
