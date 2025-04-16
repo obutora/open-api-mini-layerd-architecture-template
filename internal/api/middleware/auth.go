@@ -12,6 +12,46 @@ import (
 )
 
 // JWTAuthMiddleware はJWT認証ミドルウェアを提供します
+func SimpleApiKeyAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		// Authorizationヘッダーの取得
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "認証ヘッダーがありません",
+				"code":  model.ErrUnauthorized,
+			})
+			return
+		}
+
+		// Bearer トークンの抽出
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "認証形式が不正です",
+				"code":  model.ErrUnauthorized,
+			})
+			return
+		}
+
+		tokenString := parts[1]
+
+		// TODO: トークンの検証
+		if tokenString != "hoge" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "トークンが無効です",
+				"code":  model.ErrUnauthorized,
+			})
+			return
+		}
+		// TODO: contextにユーザー情報を設定
+
+		c.Next()
+	}
+}
+
+// JWTAuthMiddleware はJWT認証ミドルウェアを提供します
 func JWTAuthMiddleware(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Authorizationヘッダーの取得

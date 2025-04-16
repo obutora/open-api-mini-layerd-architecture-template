@@ -9,7 +9,19 @@ import (
 // UserRequest はユーザー作成/更新リクエストのDTOです
 type UserRequest struct {
 	Name  string `json:"name" binding:"required"`
-	Email string `json:"email" binding:"required,email"`
+	Email string `json:"email" binding:"requiredemail"`
+}
+
+// CreateUserRequest はユーザー作成リクエストのDTOです
+type CreateUserRequest struct {
+	Name  string `json:"name" binding:"required"`
+	Email string `json:"email" binding:"requiredemail"`
+}
+
+// UpdateUserRequest はユーザー更新リクエストのDTOです
+type UpdateUserRequest struct {
+	Name  string `json:"name" binding:"omitempty"`
+	Email string `json:"email" binding:"omitemptyemail"`
 }
 
 // UserResponse はユーザー情報レスポンスのDTOです

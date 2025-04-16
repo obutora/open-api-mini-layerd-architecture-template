@@ -19,92 +19,26 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/products": {
+        "/api/v1/answer/completion": {
             "get": {
-                "description": "製品一覧をページネーションで取得します",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "products"
-                ],
-                "summary": "製品一覧取得",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "ページ番号",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "ページサイズ",
-                        "name": "size",
-                        "in": "query"
-                    }
-                ],
+                "summary": "回答を収集し、Media-Userに通知を送信し、Userをリダイレクトします",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "308": {
+                        "description": "https://www.google.com/",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductsResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "新しい製品を作成します",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "products"
-                ],
-                "summary": "製品作成",
-                "parameters": [
-                    {
-                        "description": "製品情報",
-                        "name": "product",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "type": "string"
                         }
                     }
                 }
             }
         },
-        "/api/v1/products/{id}": {
+        "/api/v1/questionnaires/list": {
             "get": {
-                "description": "指定されたIDの製品情報を取得します",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -112,133 +46,112 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "questionnaires"
                 ],
-                "summary": "製品情報取得",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "製品ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "質問票のリストを取得します",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Questionnaire"
+                            }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "401": {
+                        "description": "認証エラー",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "指定されたIDの製品情報を更新します",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "products"
-                ],
-                "summary": "製品更新",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "製品ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "製品情報",
-                        "name": "product",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "指定されたIDの製品を削除します",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "products"
-                ],
-                "summary": "製品削除",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "製品ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
                         }
                     }
                 }
             }
         },
-        "/api/v1/users": {
+        "/api/v1/questionnaires/{id}": {
             "get": {
-                "description": "ユーザー一覧をページネーションで取得します",
+                "description": "idの質問票を取得します。ユーザーが一度もplatformを利用していない場合は登録画面にリダイレクトします",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "questionnaires"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "質問票ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ユーザーのメールハッシュ",
+                        "name": "hash",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Questionnaire"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/questionnaires/{id}/status": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "質問票のステータスを取得します",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "questionnaires"
+                ],
+                "summary": "質問票のステータスを取得します",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "質問票ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "質問票のステータス",
+                        "schema": {
+                            "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "ページネーションを使用してユーザー一覧を取得します",
                 "consumes": [
                     "application/json"
                 ],
@@ -248,7 +161,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "ユーザー一覧取得",
+                "summary": "ユーザー一覧を取得",
                 "parameters": [
                     {
                         "type": "integer",
@@ -260,8 +173,8 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "default": 10,
-                        "description": "ページサイズ",
-                        "name": "size",
+                        "description": "1ページあたりの件数",
+                        "name": "pageSize",
                         "in": "query"
                     }
                 ],
@@ -269,13 +182,16 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UsersResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.UserResponse"
+                            }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
                         }
                     }
                 }
@@ -291,7 +207,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "ユーザー作成",
+                "summary": "ユーザーを作成",
                 "parameters": [
                     {
                         "description": "ユーザー情報",
@@ -299,7 +215,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UserRequest"
+                            "$ref": "#/definitions/dto.CreateUserRequest"
                         }
                     }
                 ],
@@ -307,21 +223,27 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse"
+                            "$ref": "#/definitions/dto.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
                         }
                     }
                 }
             }
         },
-        "/api/v1/users/{id}": {
+        "/users/{id}": {
             "get": {
-                "description": "指定されたIDのユーザー情報を取得します",
+                "description": "指定されたIDのユーザーを取得します",
                 "consumes": [
                     "application/json"
                 ],
@@ -331,7 +253,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "ユーザー情報取得",
+                "summary": "ユーザーを取得",
                 "parameters": [
                     {
                         "type": "integer",
@@ -345,19 +267,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/dto.UserResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
                         }
                     }
                 }
@@ -373,7 +295,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "ユーザー更新",
+                "summary": "ユーザーを更新",
                 "parameters": [
                     {
                         "type": "integer",
@@ -383,12 +305,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "ユーザー情報",
+                        "description": "更新するユーザー情報",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UserRequest"
+                            "$ref": "#/definitions/dto.UpdateUserRequest"
                         }
                     }
                 ],
@@ -396,19 +318,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse"
+                            "$ref": "#/definitions/dto.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
                         }
                     }
                 }
@@ -424,7 +352,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "ユーザー削除",
+                "summary": "ユーザーを削除",
                 "parameters": [
                     {
                         "type": "integer",
@@ -441,13 +369,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_obutora_internal_model.AppError"
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
                         }
                     }
                 }
@@ -455,71 +389,9 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_obutora_internal_api_v1_dto.ProductRequest": {
+        "dto.CreateUserRequest": {
             "type": "object",
             "required": [
-                "name",
-                "price"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                }
-            }
-        },
-        "github_com_obutora_internal_api_v1_dto.ProductResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "github_com_obutora_internal_api_v1_dto.ProductsResponse": {
-            "type": "object",
-            "properties": {
-                "page": {
-                    "type": "integer"
-                },
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.ProductResponse"
-                    }
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "total": {
-                    "type": "integer"
-                }
-            }
-        },
-        "github_com_obutora_internal_api_v1_dto.UserRequest": {
-            "type": "object",
-            "required": [
-                "email",
                 "name"
             ],
             "properties": {
@@ -531,7 +403,18 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_obutora_internal_api_v1_dto.UserResponse": {
+        "dto.UpdateUserRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -551,43 +434,24 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_obutora_internal_api_v1_dto.UsersResponse": {
-            "type": "object",
-            "properties": {
-                "page": {
-                    "type": "integer"
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "total": {
-                    "type": "integer"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_obutora_internal_api_v1_dto.UserResponse"
-                    }
-                }
-            }
-        },
-        "github_com_obutora_internal_model.AppError": {
+        "model.AppError": {
             "type": "object",
             "properties": {
                 "code": {
-                    "$ref": "#/definitions/github_com_obutora_internal_model.ErrorCode"
+                    "$ref": "#/definitions/model.ErrorCode"
                 },
                 "message": {
                     "type": "string"
                 }
             }
         },
-        "github_com_obutora_internal_model.ErrorCode": {
+        "model.ErrorCode": {
             "type": "string",
             "enum": [
                 "NOT_FOUND",
                 "INVALID_INPUT",
                 "UNAUTHORIZED",
+                "BAD_REQUEST",
                 "INTERNAL_ERROR",
                 "DUPLICATE"
             ],
@@ -595,9 +459,35 @@ const docTemplate = `{
                 "ErrNotFound",
                 "ErrInvalidInput",
                 "ErrUnauthorized",
+                "ErrBadRequest",
                 "ErrInternalError",
                 "ErrDuplicate"
             ]
+        },
+        "model.Questionnaire": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "Bearer Tokenによる認証。'Bearer 'プレフィックスの後にJWTトークンを入力してください。",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

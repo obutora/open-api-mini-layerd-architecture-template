@@ -2,7 +2,6 @@ package util
 
 import (
 	"reflect"
-	"regexp"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -28,8 +27,8 @@ func NewValidator() *Validator {
 	})
 
 	// カスタムバリデーションの登録
-	_ = v.RegisterValidation("phone", validatePhone)
-	_ = v.RegisterValidation("password", validatePassword)
+	// _ = v.RegisterValidation("phone", validatePhone)
+	// _ = v.RegisterValidation("password", validatePassword)
 
 	return &Validator{
 		validator: v,
@@ -88,28 +87,28 @@ func formatValidationError(e validator.FieldError) string {
 }
 
 // validatePhone は電話番号のバリデーションを行います
-func validatePhone(fl validator.FieldLevel) bool {
-	// 日本の電話番号形式（例: 090-1234-5678）
-	re := regexp.MustCompile(`^(0\d{1,4}-\d{1,4}-\d{4})$`)
-	return re.MatchString(fl.Field().String())
-}
+// func validatePhone(fl validator.FieldLevel) bool {
+// 	// 日本の電話番号形式（例: 090-1234-5678）
+// 	re := regexp.MustCompile(`^(0\d{1,4}-\d{1,4}-\d{4})$`)
+// 	return re.MatchString(fl.Field().String())
+// }
 
 // validatePassword はパスワードのバリデーションを行います
-func validatePassword(fl validator.FieldLevel) bool {
-	password := fl.Field().String()
-	// 8文字以上
-	if len(password) < 8 {
-		return false
-	}
+// func validatePassword(fl validator.FieldLevel) bool {
+// 	password := fl.Field().String()
+// 	// 8文字以上
+// 	if len(password) < 8 {
+// 		return false
+// 	}
 
-	// 少なくとも1つの数字
-	hasNumber := regexp.MustCompile(`[0-9]`).MatchString(password)
-	// 少なくとも1つの大文字
-	hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
-	// 少なくとも1つの小文字
-	hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
-	// 少なくとも1つの特殊文字
-	hasSpecial := regexp.MustCompile(`[!@#$%^&*(),.?":{}|<>]`).MatchString(password)
+// 	// 少なくとも1つの数字
+// 	hasNumber := regexp.MustCompile(`[0-9]`).MatchString(password)
+// 	// 少なくとも1つの大文字
+// 	hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
+// 	// 少なくとも1つの小文字
+// 	hasLower := regexp.MustCompile(`[a-z]`).MatchString(password)
+// 	// 少なくとも1つの特殊文字
+// 	hasSpecial := regexp.MustCompile(`[!@#$%^&*(),.?":{}|<>]`).MatchString(password)
 
-	return hasNumber && hasUpper && hasLower && hasSpecial
-}
+// 	return hasNumber && hasUpper && hasLower && hasSpecial
+// }

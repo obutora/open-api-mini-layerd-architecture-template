@@ -7,6 +7,10 @@ package main
 // @contact.email support@example.com
 // @host localhost:8080
 // @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @description Bearer Tokenによる認証。'Bearer 'プレフィックスの後にJWTトークンを入力してください。
 
 import (
 	"database/sql"

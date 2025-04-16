@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // ErrorCode はアプリケーションエラーコードを表します
 type ErrorCode string
@@ -10,6 +13,7 @@ const (
 	ErrNotFound      ErrorCode = "NOT_FOUND"
 	ErrInvalidInput  ErrorCode = "INVALID_INPUT"
 	ErrUnauthorized  ErrorCode = "UNAUTHORIZED"
+	ErrBadRequest    ErrorCode = "BAD_REQUEST"
 	ErrInternalError ErrorCode = "INTERNAL_ERROR"
 	ErrDuplicate     ErrorCode = "DUPLICATE"
 )
@@ -32,6 +36,36 @@ func (e *AppError) Error() string {
 // Unwrap は内部エラーを返します
 func (e *AppError) Unwrap() error {
 	return e.Err
+}
+
+// IsNotFoundError はエラーが「見つからない」エラーかどうかを判定します
+func IsNotFoundError(err error) bool {
+	var appErr *AppError
+	return errors.As(err, &appErr) && appErr.Code == ErrNotFound
+}
+
+// IsInvalidInputError はエラーが「無効な入力」エラーかどうかを判定します
+func IsInvalidInputError(err error) bool {
+	var appErr *AppError
+	return errors.As(err, &appErr) && appErr.Code == ErrInvalidInput
+}
+
+// IsUnauthorizedError はエラーが「認証エラー」かどうかを判定します
+func IsUnauthorizedError(err error) bool {
+	var appErr *AppError
+	return errors.As(err, &appErr) && appErr.Code == ErrUnauthorized
+}
+
+// IsInternalError はエラーが「内部エラー」かどうかを判定します
+func IsInternalError(err error) bool {
+	var appErr *AppError
+	return errors.As(err, &appErr) && appErr.Code == ErrInternalError
+}
+
+// IsDuplicateError はエラーが「重複エラー」かどうかを判定します
+func IsDuplicateError(err error) bool {
+	var appErr *AppError
+	return errors.As(err, &appErr) && appErr.Code == ErrDuplicate
 }
 
 // NewNotFoundError は「見つからない」エラーを作成します
