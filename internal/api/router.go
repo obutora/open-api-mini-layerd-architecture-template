@@ -24,6 +24,7 @@ func SetupRouter(db *sql.DB, cfg *config.Config) *gin.Engine {
 	// サービスの初期化
 	userService := service.NewUserService(userRepo)
 	answerService := service.NewAnswerService()
+	paymentsService := service.NewPaymentService()
 	questionnaireService := service.NewQuestionnaireService()
 
 	// ミドルウェアの設定
@@ -37,8 +38,9 @@ func SetupRouter(db *sql.DB, cfg *config.Config) *gin.Engine {
 	v1API := r.Group("/api/v1")
 	v1UserHandler := v1handler.NewUserHandler(userService)
 	v1AnswerHandler := v1handler.NewAnswerHandler(answerService)
+	v1PaymentsHandler := v1handler.NewPaymentHandler(paymentsService)
 	v1QuestionnaireHandler := v1handler.NewQuestionnaireHandler(questionnaireService)
-	v1.RegisterRoutes(v1API, v1UserHandler, v1AnswerHandler, v1QuestionnaireHandler)
+	v1.RegisterRoutes(v1API, v1UserHandler, v1AnswerHandler, v1PaymentsHandler, v1QuestionnaireHandler)
 
 	// Swaggerドキュメント
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

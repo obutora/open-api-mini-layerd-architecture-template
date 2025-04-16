@@ -52,6 +52,15 @@ definitions:
     - ErrBadRequest
     - ErrInternalError
     - ErrDuplicate
+  model.Payment:
+    properties:
+      amount:
+        type: integer
+      id:
+        type: integer
+      payment_date:
+        type: string
+    type: object
   model.Questionnaire:
     properties:
       created_at:
@@ -80,6 +89,40 @@ paths:
           schema:
             type: string
       summary: 回答を収集し、Media-Userに通知を送信し、Userをリダイレクトします
+  /api/v1/payments:
+    get:
+      description: 指定された期間の請求情報を取得します
+      parameters:
+      - description: 開始日
+        format: date
+        in: query
+        name: startDate
+        required: true
+        type: string
+      - description: 終了日
+        format: date
+        in: query
+        name: endDate
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Payment'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.AppError'
+      security:
+      - ApiKeyAuth: []
+      summary: 指定された期間の請求情報を取得します
+      tags:
+      - payments
   /api/v1/questionnaires/{id}:
     get:
       description: idの質問票を取得します。ユーザーが一度もplatformを利用していない場合は登録画面にリダイレクトします
@@ -105,6 +148,35 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/model.AppError'
+      summary: 質問票を取得します。
+      tags:
+      - questionnaires
+    patch:
+      consumes:
+      - application/json
+      description: 質問票を更新します
+      parameters:
+      - description: 質問票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 質問票情報
+        in: body
+        name: questionnaire
+        required: true
+        schema:
+          $ref: '#/definitions/model.Questionnaire'
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.AppError'
+      security:
+      - ApiKeyAuth: []
+      summary: 質問票を更新します
       tags:
       - questionnaires
   /api/v1/questionnaires/{id}/status:

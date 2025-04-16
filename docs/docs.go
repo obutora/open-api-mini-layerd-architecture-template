@@ -32,6 +32,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/payments": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "指定された期間の請求情報を取得します",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payments"
+                ],
+                "summary": "指定された期間の請求情報を取得します",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "開始日",
+                        "name": "startDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "終了日",
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Payment"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/questionnaires/list": {
             "get": {
                 "security": [
@@ -77,6 +129,7 @@ const docTemplate = `{
                 "tags": [
                     "questionnaires"
                 ],
+                "summary": "質問票を取得します。",
                 "parameters": [
                     {
                         "type": "string",
@@ -99,6 +152,50 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.Questionnaire"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.AppError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "質問票を更新します",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "questionnaires"
+                ],
+                "summary": "質問票を更新します",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "質問票ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "質問票情報",
+                        "name": "questionnaire",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Questionnaire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -463,6 +560,20 @@ const docTemplate = `{
                 "ErrInternalError",
                 "ErrDuplicate"
             ]
+        },
+        "model.Payment": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "payment_date": {
+                    "type": "string"
+                }
+            }
         },
         "model.Questionnaire": {
             "type": "object",

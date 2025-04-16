@@ -7,7 +7,7 @@ import (
 )
 
 // RegisterRoutes はv1 APIのルートを登録します
-func RegisterRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler, answerHandler *handler.AnswerHandler, questionnaireHandler *handler.QuestionnaireHandler) {
+func RegisterRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler, answerHandler *handler.AnswerHandler, paymentsHandler *handler.PaymentHandler, questionnaireHandler *handler.QuestionnaireHandler) {
 	// ユーザー関連エンドポイント
 	users := r.Group("/users")
 	{
@@ -23,7 +23,8 @@ func RegisterRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler, answer
 		questionnaires.GET("/list", middleware.SimpleApiKeyAuthMiddleware(), questionnaireHandler.ListQuestionnaires)           // GET /api/v1/questionnaires/list
 		questionnaires.GET("/:id/status", middleware.SimpleApiKeyAuthMiddleware(), questionnaireHandler.GetQuestionnaireStatus) // GET /api/v1/questionnaires/{id}/status [get]
 
-		questionnaires.GET("/:id", questionnaireHandler.GetQuestionnaire) // GET /api/v1/questionnaires/:id?hash=xxx
+		questionnaires.GET("/:id", questionnaireHandler.GetQuestionnaire)                                               // GET /api/v1/questionnaires/:id?hash=xxx
+		questionnaires.PATCH("/:id", middleware.SimpleApiKeyAuthMiddleware(), questionnaireHandler.UpdateQuestionnaire) // PATCH /api/v1/questionnaires
 	}
 
 	answers := r.Group("/answer")
@@ -32,5 +33,10 @@ func RegisterRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler, answer
 	}
 
 	// TODO: 別コンテナにするかも
+	payments := r.Group("/payments")
+	{
+		payments.Use(middleware.SimpleApiKeyAuthMiddleware())
+		payments.GET("", paymentsHandler.GetPayments) // GET /api/v1/payments
+	}
 
 }
