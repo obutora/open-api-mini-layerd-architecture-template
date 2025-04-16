@@ -27,6 +27,11 @@ docs:
 # アプリケーションの実行
 .PHONY: run
 run:
+	@echo "Swaggoをインストールしています..."
+	@go install github.com/swaggo/swag/cmd/swag@$(SWAG_VERSION)
+	@echo "APIドキュメントを生成しています..."
+	@$(shell go env GOPATH)/bin/swag init $(SWAG_INIT_OPTIONS)
+	@echo "ドキュメント生成が完了しました。docs/ディレクトリを確認してください。"
 	@echo "アプリケーションを実行しています..."
 	@go run $(MAIN_PACKAGE)
 
